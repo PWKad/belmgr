@@ -6,7 +6,8 @@ function extend(obj, src) {
 }
 
 var configForLocalDev = {
-  'baseUrl' : 'http://next.belframework.org/api',
+//  'baseUrl' : 'http://next.belframework.org/api',
+  'baseUrl' : 'http://api.selventa.com/api',
   'logLevel' : LogManager.logLevel.debug
 }
 

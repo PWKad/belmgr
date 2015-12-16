@@ -1,9 +1,13 @@
 import {AuthService} from 'aurelia-auth';
-import {inject} from 'aurelia-framework';
+import {inject, LogManager} from 'aurelia-framework';
 import {Api} from '../resources/api';
+
+let logger = LogManager.getLogger('login');
 
 @inject(AuthService, Api)
 export class Login {
+
+  msg = '';
 
   constructor(auth, api) {
     this.auth = auth;
@@ -15,6 +19,11 @@ export class Login {
       window.location.href = "/";
     }
   };
+
+  activate(params, routeConfig, navigationInstruction) {
+    logger.debug('Params: ', params);
+    this.msg = params.msg;
+  }
 
   heading = 'Login';
 

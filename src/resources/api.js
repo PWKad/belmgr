@@ -19,7 +19,6 @@ let baseUrl = Config.baseUrl;
 // let pubmedBaseUrl = 'http://www.ebi.ac.uk/europepmc/webservices/rest/search';
 let pubmedBaseUrl = Config.pubmedBaseUrl;
 
-
 export class Api {
 
   constructor() {
@@ -63,22 +62,23 @@ export class Api {
         .rejectErrorResponses()
         .withInterceptor({
           request(req) {
-            logger.debug(`Requesting ${req.method} ${req.url}`);
-            return req; // you can return a modified Request, or you can short-circuit the request by returning a
-            // Response
+              logger.debug(`Requesting ${req.method} ${req.url}`);
+              return req; // you can return a modified Request, or you can short-circuit the request by returning a
+              // Response
           },
-          response(resp) {
-            logger.debug(`Received ${resp.status} ${resp.url}`);
-            return resp; // you can return a modified Response
-          },
-          responseError(resp) {
-            if (resp.status === 401) {
-              logger.info('Backend returned HTTP 401, redirecting to home.');
-              window.location.href = window.location.origin;
-            }
-            logger.debug(`Received ${resp.status} ${resp.url}`);
-            let rejection = Promise.reject(resp);
-            return rejection;
+            response(resp) {
+              logger.debug(`Received ${resp.status} ${resp.url}`);
+              return resp; // you can return a modified Response
+            },
+            responseError(resp) {
+              if (resp.status === 401) {
+                logger.info('Backend returned HTTP 401, redirecting to login.');
+                // new Redirect('login');
+                window.location.href = '/#/login?msg="Please login - the page you tried to access requires you to be logged in"';
+              }
+              logger.debug(`Received Error ${resp.status} ${resp.url}`);
+              let rejection = Promise.reject(resp);
+              return rejection;
           }
         });
     });
@@ -494,10 +494,10 @@ export class Api {
       });
   }
 
-
   authenticate() {
-    let current = window.location.href;
-    window.location.href = baseUrl + '/authenticate?state=' + current;
+    let next = window.location.href;
+    logger.debug('Next: ', next);
+    window.location.href = baseUrl + '/authenticate?state=' + next;
   }
 
   setToken(token) {
